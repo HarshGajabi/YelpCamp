@@ -5,13 +5,14 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 
 const catchAsync = require('../utils/catchAsync');
-const { validateReviews } = require("../middleware");
+const { validateReviews, isLoggedIn, isReviewAuthor } = require("../middleware");
 
 
-route.post("/", validateReviews, catchAsync(async (req, res) => {
+route.post("/", isLoggedIn, validateReviews, catchAsync(async (req, res) => {
     const { id } = req.params;
     const currCamp = await Campground.findById(id);
     const newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
     currCamp.reviews.push(newReview);
     await currCamp.save();
     await newReview.save();
@@ -19,7 +20,7 @@ route.post("/", validateReviews, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${id}`);
 }))
 
-route.delete("/:reviewId", catchAsync(async (req, res) => {
+route.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, {
         $pull: { reviews: reviewId },

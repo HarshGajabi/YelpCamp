@@ -24,11 +24,17 @@ route.post("/", isLoggedIn, validateCampgrounds, catchAsync(async (req, res) => 
 
 route.get("/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
-    const currCamp = await Campground.findById(id).populate("reviews").populate("author");
+    const currCamp = await Campground.findById(id).populate({
+        path: "reviews",
+        populate: {
+            path: "author"
+        }
+    }).populate("author");
     if (!currCamp) {
         req.flash("error", "Cannot find the requested Campground!")
         res.redirect('/campgrounds');
     }
+    console.log(currCamp);
     res.render("campgrounds/show.ejs", { camp: currCamp });
 }));
 
