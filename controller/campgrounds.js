@@ -31,7 +31,6 @@ exp.showCamp = async (req, res) => {
         req.flash("error", "Cannot find the requested Campground!")
         res.redirect('/campgrounds');
     }
-    console.log(currCamp);
     res.render("campgrounds/show.ejs", { camp: currCamp });
 };
 
