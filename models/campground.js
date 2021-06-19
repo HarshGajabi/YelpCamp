@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema; // shortcut for schema
 const Review = require("./review");
+const User = require("./user");
 
 const CampgroundSchema = new Schema({
     title: String,
