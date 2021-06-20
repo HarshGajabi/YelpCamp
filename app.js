@@ -7,6 +7,8 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+var multer = require('multer')
+var upload = multer({ dest: 'uploads/' })
 
 
 // const Campground = require('./models/campground');
